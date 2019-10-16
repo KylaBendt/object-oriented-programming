@@ -60,15 +60,19 @@ private $authorUsername;
  * @param string|Uuid $newAuthorId id of this author or null if a new author
  * @param string $newAuthorActivationToken (string len = 32)
  * @param string $newAuthorAvatarUrl
+ * @param string $newAuthorEmail
+ * @param string $newAuthorHash
+ * @param string $newAuthorUsername
  **/
 
-public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash) {
+public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
 	try{
 		$this->setAuthorId($newAuthorId);
 		$this->setAuthorActivationToken($newAuthorActivationToken);
 		$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
 		$this->setAuthorEmail($newAuthorEmail);
 		$this->setAuthorHash($newAuthorHash);
+		$this->setUsername($newAuthorUsername);
 	}
 	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
@@ -110,120 +114,148 @@ public function setAuthorId($newAuthorId) : void {
 	 *
 	 * @return string value of $authorActivationToken
 	 **/
-	public function getAuthorActivationToken() : string {
-		return($this->authorActivationToken);
+public function getAuthorActivationToken() : string {
+	return($this->authorActivationToken);
+}
+
+/**
+ * mutator/setter method for authorActivationToken
+ *
+ * @param string $newAuthorActivationToken new value of author activation token
+ * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string
+ **/
+public function setAuthorActivationToken($newAuthorActivationToken) : void {
+	//verify content is secure
+	$newAuthorActivationToken = trim($newAuthorActivationToken);
+	$newAuthorActivationToken = filter_var($newAuthorActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newAuthorActivationToken) === true) {
+		throw(new \InvalidArgumentException("author activation token is empty or insecure"));
 	}
 
-	/**
-	 * mutator/setter method for authorActivationToken
-	 *
-	 * @param string $newAuthorActivationToken new value of author activation token
-	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string
-	 **/
-	public function setAuthorActivationToken($newAuthorActivationToken) : void {
-		//verify content is secure
-		$newAuthorActivationToken = trim($newAuthorActivationToken);
-		$newAuthorActivationToken = filter_var($newAuthorActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorActivationToken) === true) {
-			throw(new \InvalidArgumentException("author activation token is empty or insecure"));
+	//verify Activation token is the right length
+	if(strlen($newAuthorActivationToken) != 32) {
+		throw(new \RangeException("activation token is the wrong length"));
 		}
 
-		//verify Activation token is the right length
-		if(strlen($newAuthorActivationToken) != 32) {
-			throw(new \RangeException("activation token is the wrong length"));
-			}
+	//store the activation token
+	$this->authorActivationToken = $newAuthorActivationToken;
+}
 
-		//store the activation token
-		$this->authorActivationToken = $newAuthorActivationToken;
+
+/**
+ * accessor/getter method for authorAvatarUrl
+ *
+ * @return string value of $authorAvatarUrl
+ **/
+public function getAuthorAvatarUrl() : string {
+	return($this->authorAvatarUrl);
+}
+
+/**
+ * mutator/setter method for authorAvatarUrl
+ *
+ * @param string $newAuthorAvatarUrl new value of author avatar url
+ * @throws \InvalidArgumentException if $newAuthorAvatarUrl is insecure
+ **/
+public function setAuthorAvatarUrl($newAuthorAvatarUrl) : void {
+	//verify content is secure
+	$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+	$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newAuthorAvatarUrl) === true) {
+		throw(new \InvalidArgumentException("author avatar url is empty or insecure"));
 	}
 
+	//store the author avatar url
+	$this->authorAvatarUrl = $newAuthorAvatarUrl;
+}
 
-	/**
-	 * accessor/getter method for authorAvatarUrl
-	 *
-	 * @return string value of $authorAvatarUrl
-	 **/
-	public function getAuthorAvatarUrl() : string {
-		return($this->authorAvatarUrl);
+
+/**
+ * accessor/getter method for authorEmail
+ *
+ * @return string value of $authorEmail
+ **/
+public function getAuthorEmail() : string {
+	return($this->authorEmail);
+}
+
+/**
+ * mutator/setter method for authorEmail
+ *
+ * @param string $newAuthorEmail new value of author email
+ * @throws \InvalidArgumentException if $newAuthorEmail is insecure
+ **/
+public function setAuthorEmail($newAuthorEmail) : void {
+	//verify content is secure
+	$newAuthorEmail = trim($newAuthorEmail);
+	$newAuthorEmail = filter_var($newAuthorEmail,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newAuthorEmail) === true) {
+		throw(new \InvalidArgumentException("author email is empty or insecure"));
 	}
 
-	/**
-	 * mutator/setter method for authorAvatarUrl
-	 *
-	 * @param string $newAuthorAvatarUrl new value of author avatar url
-	 * @throws \InvalidArgumentException if $newAuthorAvatarUrl is insecure
-	 **/
-	public function setAuthorAvatarUrl($newAuthorAvatarUrl) : void {
-		//verify content is secure
-		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
-		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorAvatarUrl) === true) {
-			throw(new \InvalidArgumentException("author avatar url is empty or insecure"));
-		}
+	//store the author avatar url
+	$this->authorEmail = $newAuthorEmail;
+}
 
-		//store the author avatar url
-		$this->authorAvatarUrl = $newAuthorAvatarUrl;
+/**
+ * accessor/getter method for authorHash
+ *
+ * @return string value of $authorHash
+ **/
+public function getAuthorHash() : string {
+	return($this->authorHash);
+}
+
+/**
+ * mutator/setter method for authorHash
+ *
+ * @param string $newAuthorHash new value of author hash
+ * @throws \InvalidArgumentException if $newAuthorHash is not a string or is insecure
+ * @throws \RangeException if $newAuthorHash is the wrong length (not 97 chars)
+ **/
+public function setAuthorHash($newAuthorHash) : void {
+//verify content is secure
+$newAuthorHash = trim($newAuthorHash);
+$newAuthorHash = filter_var($newAuthorHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+if(empty($newAuthorHash) === true) {
+	throw(new \InvalidArgumentException("author hash is empty or insecure"));
+}
+
+//verify Activation token is the right length
+if(strlen($newAuthorHash) != 97) {
+	throw(new \RangeException("hash is the wrong length"));
+}
+
+//store the hash
+$this->authorHash = $newAuthorHash;
+}
+
+/**
+ * accessor/getter method for authorUsername
+ *
+ * @return string value of $authorUsername
+ **/
+public function getAuthorUsername() : string {
+	return($this->authorUsername);
+}
+
+/**
+ * mutator/setter method for authorUsername
+ *
+ * @param string $newAuthorUsername new value of author username
+ * @throws \InvalidArgumentException if $newUsername is insecure or empty
+ **/
+public function setUsername($newAuthorUsername) : void {
+	//verify content is secure
+	$newAuthorUsername = trim($newAuthorUsername);
+	$newAuthorUsername = filter_var($newAuthorUsername,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($newAuthorUsername) === true) {
+		throw(new \InvalidArgumentException("author username is empty or insecure"));
 	}
 
+	//store the author username
+	$this->authorUsername = $newAuthorUsername;
+}
 
-	/**
-	 * accessor/getter method for authorEmail
-	 *
-	 * @return string value of $authorEmail
-	 **/
-	public function getAuthorEmail() : string {
-		return($this->authorEmail);
-	}
-
-	/**
-	 * mutator/setter method for authorEmail
-	 *
-	 * @param string $newAuthorEmail new value of author email
-	 * @throws \InvalidArgumentException if $newAuthorEmail is insecure
-	 **/
-	public function setAuthorEmail($newAuthorEmail) : void {
-		//verify content is secure
-		$newAuthorEmail = trim($newAuthorEmail);
-		$newAuthorEmail = filter_var($newAuthorEmail,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorEmail) === true) {
-			throw(new \InvalidArgumentException("author email is empty or insecure"));
-		}
-
-		//store the author avatar url
-		$this->authorEmail = $newAuthorEmail;
-	}
-
-	/**
-	 * accessor/getter method for authorHash
-	 *
-	 * @return string value of $authorHash
-	 **/
-	public function getAuthorHash() : string {
-		return($this->authorHash);
-	}
-
-	/**
-	 * mutator/setter method for authorHash
-	 *
-	 * @param string $newAuthorHash new value of author hash
-	 * @throws \InvalidArgumentException if $newAuthorHash is not a string or is insecure
-	 * @throws \RangeException if $newAuthorHash is the wrong length (not 97 chars)
-	 **/
-	public function setAuthorHash($newAuthorHash) : void {
-		//verify content is secure
-		$newAuthorHash = trim($newAuthorHash);
-		$newAuthorHash = filter_var($newAuthorHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorHash) === true) {
-			throw(new \InvalidArgumentException("author hash is empty or insecure"));
-		}
-
-		//verify Activation token is the right length
-		if(strlen($newAuthorHash) != 97) {
-			throw(new \RangeException("hash is the wrong length"));
-		}
-
-		//store the hash
-		$this->authorHash = $newAuthorHash;
-	}
 }
 
