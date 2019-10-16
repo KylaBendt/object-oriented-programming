@@ -53,7 +53,7 @@ private $authorHash;
 private $authorUsername;
 
 
-//TODO: Write and document constructor method
+//Write and document constructor method
 /**
  * constructor for this Author
  *
@@ -80,8 +80,8 @@ public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorA
 	}
 }
 
-//TODO: Write and document an accessor/getter method for each state variable
-//TODO: Write and document a mutator/setter method for each state variable
+//Write and document an accessor/getter method for each state variable
+//Write and document a mutator/setter method for each state variable
 
 /**
  * accessor/getter method for authorId
