@@ -59,12 +59,16 @@ private $authorUsername;
  *
  * @param string|Uuid $newAuthorId id of this author or null if a new author
  * @param string $newAuthorActivationToken (string len = 32)
+ * @param string $newAuthorAvatarUrl
  **/
 
-public function __construct($newAuthorId, $newAuthorActivationToken) {
+public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash) {
 	try{
 		$this->setAuthorId($newAuthorId);
 		$this->setAuthorActivationToken($newAuthorActivationToken);
+		$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
+		$this->setAuthorEmail($newAuthorEmail);
+		$this->setAuthorHash($newAuthorHash);
 	}
 	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
@@ -113,7 +117,7 @@ public function setAuthorId($newAuthorId) : void {
 	/**
 	 * mutator/setter method for authorActivationToken
 	 *
-	 * @param string $newAuthorActivationToken new value of author id
+	 * @param string $newAuthorActivationToken new value of author activation token
 	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string
 	 **/
 	public function setAuthorActivationToken($newAuthorActivationToken) : void {
@@ -134,5 +138,92 @@ public function setAuthorId($newAuthorId) : void {
 	}
 
 
+	/**
+	 * accessor/getter method for authorAvatarUrl
+	 *
+	 * @return string value of $authorAvatarUrl
+	 **/
+	public function getAuthorAvatarUrl() : string {
+		return($this->authorAvatarUrl);
+	}
+
+	/**
+	 * mutator/setter method for authorAvatarUrl
+	 *
+	 * @param string $newAuthorAvatarUrl new value of author avatar url
+	 * @throws \InvalidArgumentException if $newAuthorAvatarUrl is insecure
+	 **/
+	public function setAuthorAvatarUrl($newAuthorAvatarUrl) : void {
+		//verify content is secure
+		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorAvatarUrl) === true) {
+			throw(new \InvalidArgumentException("author avatar url is empty or insecure"));
+		}
+
+		//store the author avatar url
+		$this->authorAvatarUrl = $newAuthorAvatarUrl;
+	}
+
+
+	/**
+	 * accessor/getter method for authorEmail
+	 *
+	 * @return string value of $authorEmail
+	 **/
+	public function getAuthorEmail() : string {
+		return($this->authorEmail);
+	}
+
+	/**
+	 * mutator/setter method for authorEmail
+	 *
+	 * @param string $newAuthorEmail new value of author email
+	 * @throws \InvalidArgumentException if $newAuthorEmail is insecure
+	 **/
+	public function setAuthorEmail($newAuthorEmail) : void {
+		//verify content is secure
+		$newAuthorEmail = trim($newAuthorEmail);
+		$newAuthorEmail = filter_var($newAuthorEmail,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorEmail) === true) {
+			throw(new \InvalidArgumentException("author email is empty or insecure"));
+		}
+
+		//store the author avatar url
+		$this->authorEmail = $newAuthorEmail;
+	}
+
+	/**
+	 * accessor/getter method for authorHash
+	 *
+	 * @return string value of $authorHash
+	 **/
+	public function getAuthorHash() : string {
+		return($this->authorHash);
+	}
+
+	/**
+	 * mutator/setter method for authorHash
+	 *
+	 * @param string $newAuthorHash new value of author hash
+	 * @throws \InvalidArgumentException if $newAuthorHash is not a string or is insecure
+	 * @throws \RangeException if $newAuthorHash is the wrong length (not 97 chars)
+	 **/
+	public function setAuthorHash($newAuthorHash) : void {
+		//verify content is secure
+		$newAuthorHash = trim($newAuthorHash);
+		$newAuthorHash = filter_var($newAuthorHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorHash) === true) {
+			throw(new \InvalidArgumentException("author hash is empty or insecure"));
+		}
+
+		//verify Activation token is the right length
+		if(strlen($newAuthorHash) != 97) {
+			throw(new \RangeException("hash is the wrong length"));
+		}
+
+		//store the hash
+		$this->authorHash = $newAuthorHash;
+	}
 }
 
