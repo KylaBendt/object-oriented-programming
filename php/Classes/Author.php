@@ -58,11 +58,11 @@ private $authorUsername;
  * constructor for this Author
  *
  * @param string|Uuid $newAuthorId id of this author or null if a new author
- * @param string $newAuthorActivationToken (string len = 32)
- * @param string $newAuthorAvatarUrl
- * @param string $newAuthorEmail
- * @param string $newAuthorHash
- * @param string $newAuthorUsername
+ * @param string $newAuthorActivationToken activation token of this author(string len = 32)
+ * @param string $newAuthorAvatarUrl avatar url of this author
+ * @param string $newAuthorEmail email of this author
+ * @param string $newAuthorHash hash of this author
+ * @param string $newAuthorUsername username of this author
  **/
 
 public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
