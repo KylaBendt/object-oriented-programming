@@ -58,11 +58,13 @@ private $authorUsername;
  * constructor for this Author
  *
  * @param string|Uuid $newAuthorId id of this author or null if a new author
+ * @param string $newAuthorActivationToken (string len = 32)
  **/
 
-public function __construct($newAuthorId) {
+public function __construct($newAuthorId, $newAuthorActivationToken) {
 	try{
 		$this->setAuthorId($newAuthorId);
+		$this->setAuthorActivationToken($newAuthorActivationToken);
 	}
 	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
@@ -99,6 +101,37 @@ public function setAuthorId($newAuthorId) : void {
 	//store the id
 	$this->authorId = $uuid;
 }
+	/**
+	 * accessor/getter method for authorActivationToken
+	 *
+	 * @return string value of $authorActivationToken
+	 **/
+	public function getAuthorActivationToken() : string {
+		return($this->authorActivationToken);
+	}
+
+	/**
+	 * mutator/setter method for authorActivationToken
+	 *
+	 * @param string $newAuthorActivationToken new value of author id
+	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string
+	 **/
+	public function setAuthorActivationToken($newAuthorActivationToken) : void {
+		//verify content is secure
+		$newAuthorActivationToken = trim($newAuthorActivationToken);
+		$newAuthorActivationToken = filter_var($newAuthorActivationToken, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorActivationToken) === true) {
+			throw(new \InvalidArgumentException("author activation token is empty or insecure"));
+		}
+
+		//verify Activation token is the right length
+		if(strlen($newAuthorActivationToken) != 32) {
+			throw(new \RangeException("activation token is the wrong length"));
+			}
+
+		//store the activation token
+		$this->authorActivationToken = $newAuthorActivationToken;
+	}
 
 
 }
