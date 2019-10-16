@@ -42,12 +42,28 @@ private $authorActivationToken;
  * @var string
  */
 private $authorAvatarUrl;
+//TODO: Write and document constructor method
+/**
+ * constructor for this Author
+ *
+ * @param string|Uuid $newAuthorId id of this author or null if a new author
+ **/
+
+public function __construct($newAuthorId) {
+	try{
+		$this->setAuthorId($newAuthorId);
+	}
+	catch(\InvalidArgumentException | \RangeException | \Exception | TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 101, $exception));
+	}
+}
 
 //TODO: Write and document an accessor/getter method for each state variable
 
 //TODO: Write and document a mutator/setter method for each state variable
 
-//TODO: Write and document constructor method
+
 
 }
 
