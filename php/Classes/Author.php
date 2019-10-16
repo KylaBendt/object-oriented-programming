@@ -60,9 +60,32 @@ public function __construct($newAuthorId) {
 }
 
 //TODO: Write and document an accessor/getter method for each state variable
-
 //TODO: Write and document a mutator/setter method for each state variable
 
+/**
+ * accessor/getter method for authorId
+ *
+ * @return Uuid value of authorId
+ **/
+public function getAuthorId() : Uuid {
+	return($this->authorId);
+}
+
+/**
+ * mutator/setter method for authorId
+ *
+ * @param Uuid|string $newAuthorId new value of author id
+ * @throws \RangeException if $newAuthorId is not positive
+ * @throws \TypeError  $newAuthorId is not a uuid or string
+ **/
+public function setAuthorId($newAuthorId) : void {
+	try {
+		$uuid = self::validateUuid($newAuthorId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		$exceptionType = get_class($exception);
+		throw(new $exceptionType($exception->getMessage(), 102, $exception));
+	}
+}
 
 
 }
