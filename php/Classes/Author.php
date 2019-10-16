@@ -3,6 +3,8 @@ namespace KylaBendt\ObjectOrientedProgramming;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__) ."/vendor/autoload.php");
+require_once("ValidateUuid.php");
+require_once("ValidateDate.php");
 
 use Ramsey\Uuid\Uuid;
 
@@ -14,18 +16,10 @@ use Ramsey\Uuid\Uuid;
  */
 
 class Author  {
+	use ValidateDate;
+	use ValidateUuid;
 
-//TODO: Write and document all state variables in the class
-
-/*authorId binary(16) not null,
-authorActivationToken char(32),
-authorAvatarUrl varchar(255),
-authorEmail varchar(128) not null,
-authorHash char(97) not null,
-authorUsername varchar(32) not null,
-unique(authorEmail),
-unique(authorUsername),
-primary key(authorId)*/
+//Write and document all state variables in the class
 
 /**
  * id for this author, primary key
@@ -33,7 +27,7 @@ primary key(authorId)*/
  */
 private $authorId;
 /**
- * activation token for this author, char(32)
+ * activation token for this author
  * @var string
  */
 private $authorActivationToken;
@@ -42,6 +36,23 @@ private $authorActivationToken;
  * @var string
  */
 private $authorAvatarUrl;
+/**
+ * author email for this author
+ * @var string
+ **/
+private $authorEmail;
+/**
+ * author Hash: hashed & salted pw for this author
+ * @var string
+ **/
+private $authorHash;
+/**
+ * author username: username for this author
+ * @var string
+ */
+private $authorUsername;
+
+
 //TODO: Write and document constructor method
 /**
  * constructor for this Author
@@ -53,7 +64,7 @@ public function __construct($newAuthorId) {
 	try{
 		$this->setAuthorId($newAuthorId);
 	}
-	catch(\InvalidArgumentException | \RangeException | \Exception | TypeError $exception) {
+	catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 101, $exception));
 	}
@@ -85,6 +96,8 @@ public function setAuthorId($newAuthorId) : void {
 		$exceptionType = get_class($exception);
 		throw(new $exceptionType($exception->getMessage(), 102, $exception));
 	}
+	//store the id
+	$this->authorId = $uuid;
 }
 
 
