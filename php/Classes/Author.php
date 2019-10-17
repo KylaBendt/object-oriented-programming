@@ -3,10 +3,9 @@ namespace KylaBendt\ObjectOrientedProgramming;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__) ."/vendor/autoload.php");
-require_once("ValidateUuid.php");
-require_once("ValidateDate.php");
 
 use Ramsey\Uuid\Uuid;
+
 
 /**
  * This class represents an author (who is also a user)
@@ -16,8 +15,7 @@ use Ramsey\Uuid\Uuid;
  */
 
 class Author  {
-	use ValidateDate;
-	use ValidateUuid;
+	use \KylaBendt\ObjectOrientedProgramming\ValidateUuid;
 
 //Write and document all state variables in the class
 

@@ -1,5 +1,5 @@
 <?php
-namespace KylaBendt\objectOrientedProgramming;
+namespace KylaBendt\ObjectOrientedProgramming;
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 /**

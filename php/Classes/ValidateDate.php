@@ -1,5 +1,5 @@
 <?php
-namespace KylaBendt\objectOrientedProgramming;
+namespace KylaBendt\ObjectOrientedProgramming;
 /**
  * Trait to Validate a mySQL Date
  *
