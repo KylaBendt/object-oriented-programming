@@ -18,6 +18,7 @@ class Author  {
 	use \KylaBendt\ObjectOrientedProgramming\ValidateUuid;
 
 //Write and document all state variables in the class
+//authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername
 
 /**
  * id for this author, primary key
@@ -254,6 +255,32 @@ public function setUsername($newAuthorUsername) : void {
 	//store the author username
 	$this->authorUsername = $newAuthorUsername;
 }
+
+
+//Write and Document an insert statement method
+/*
+ * inserts info from this author into DB
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ */
+
+public function insert(\PDO $pdo) : void {
+
+	// create query template
+	$query = "INSERT INTO author(authorId, authorActivationToken, authorEmail, authorHash, authorUsername) VALUES(:authorId, :authorActivationToken, :authorEmail, :authorHash, :authorUsername)";
+	$statement = $pdo->prepare($query);
+
+	// bind the member variables to the place holders in the template
+	$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
+	$statement->execute($parameters);
+}
+
+//Write and Document an update statement method
+//Write and Document a delete statement method.
+//Write and document a getFooByBar method that returns a single object
+//Write and document a getFooByBar method that returns a full array
 
 }
 
