@@ -312,7 +312,6 @@ public function delete(\PDO $pdo) : void {
 	$parameters = ["authorId" => $this->authorId->getBytes()];
 	$statement->execute($parameters);
 }
-//TODO: Write and document a getFooByBar method that returns a single object
 
 /*
  * gets author by email
@@ -321,10 +320,16 @@ public function delete(\PDO $pdo) : void {
  * @param string $authorEmail author email
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError if $pdo is not a PDO connection object
+ * @throws \InvalidArgumentException if $authorEmail is empty or insecure
  */
 
 public static function getAuthorByEmail(\PDO $pdo, $authorEmail) : ?Author {
-	//TODO sanitize the email before searching
+	//verify content is secure
+	$authorEmail = trim($authorEmail);
+	$authorEmail = filter_var($authorEmail,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($authorEmail) === true) {
+		throw(new \InvalidArgumentException("author username is empty or insecure"));
+	}
 
 	//create query template
 	$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername WHERE authorEmail = :authorEmail";
@@ -347,8 +352,7 @@ public static function getAuthorByEmail(\PDO $pdo, $authorEmail) : ?Author {
 		throw(new \PDOException($exception->getMessage(), 0, $exception));
 	}
 	 return($author);
-
-	}
+}
 
 //TODO: Write and document a getFooByBar method that returns a full array
 
