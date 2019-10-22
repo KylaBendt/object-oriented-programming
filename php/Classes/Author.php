@@ -365,7 +365,7 @@ public static function getAuthorByEmail(\PDO $pdo, $authorEmail) : ?Author {
  * @throw \TypeError when variables are not of the correct data type
  */
 
-public static function getAuthorByPartialAuthorUsername(/PDO $pdo, $authorPartialUsername) :  \SplFixedArray {
+public static function getAuthorByPartialAuthorUsername(\PDO $pdo, $authorPartialUsername) : \SplFixedArray {
 	//sanitize input
 	$authorPartialUsername = trim($authorPartialUsername);
 	$authorPartialUsername = filter_var($authorPartialUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -376,14 +376,13 @@ public static function getAuthorByPartialAuthorUsername(/PDO $pdo, $authorPartia
 	//escape any mySQL wild cards
 	$authorPartialUsername = str_replace("_", "\\_", str_replace("%", "\\%", $authorPartialUsername));
 
-
 	//create query template
-	$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername WHERE authorUsername = :authorUsername";
+	$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername WHERE authorUsername = :authorPartialUsername";
 	$statement = $pdo->prepare($query);
 
 	//bind search content to place holder
 	$authorPartialUsername = "%authorPartialUsername%";
-	$parameters = ["authorUsername" = $authorPartialUsername];
+	$parameters = ["authorPartialUsername" => $authorPartialUsername];
 	$statement->execute($parameters);
 
 	//build an array of authors
